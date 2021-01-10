@@ -18,6 +18,11 @@ from django.urls import path
 from restApp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/weatherAppLogIn',views.weatherAppLogIn),
-    path('createRoot',views.createRoot)
+    path('createRoot',views.createRoot),
+    path('api/weatherApp/getDatasets',views.getDatasets),
+    path('api/weatherApp/getTable',views.getTable),
+    path('api/weatherApp/LogIn',views.weatherAppLogIn),
+    path('api/weatherApp/createUser',views.createUser),
+    path('api/weatherApp/storeDataset',views.storeDataset),
+    path('api/weatherApp/saveCities',views.saveCities)
 ]
