@@ -1,0 +1,11 @@
+version: 0.0
+os: linux
+files:
+  -source: bin
+  destination: /var/www/backend/
+  -source:lib
+  destination: /var/www/backend/
+  -source: rest
+  destination: /var/www/backend/
+  -source:pyvenv.cfg
+  destination: /var/www/backend/
