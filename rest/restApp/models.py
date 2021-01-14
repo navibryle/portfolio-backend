@@ -14,6 +14,7 @@ class WeatherDataset(models.Model):
     temp = models.CharField(max_length=50)
     feels_like = models.CharField(max_length=50)
     temp_min = models.CharField(max_length=50)
+    temp_max = models.CharField(max_length=50)
     pressure = models.CharField(max_length=50)
     humidity = models.CharField(max_length=50)
     visibility = models.CharField(max_length=50)

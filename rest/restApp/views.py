@@ -10,10 +10,13 @@ UNSECCESSFUL_LOGIN = "00"
 ACCOUNT_CREATED = "22"
 ACCOUNT_EXSIST = "33"
 
-SUCCESSFUL_CREATTION = "44"
+SUCCESSFUL_CREATTION = "77"
 
 SUCCESSFULY_SAVED = "91"
 UNSECCESSFUL_SAVE = "92"
+
+SUCCESSFULY_DELETED = "92"
+UNSUCCESSFULY_DELETED = "92"
 def weatherAppLogIn(request):
     requestUsername = request.GET.getlist("username")[0]
     requestPassword = request.GET.getlist("password")[0]
@@ -57,16 +60,13 @@ def createUser(request):
         user.save()
         resp = HttpResponse(ACCOUNT_CREATED,content_type="text/plain")
         return resp
+
 @ensure_csrf_cookie
 def saveCities(request):
     requestUsername = request.GET.getlist("username")[0]
     requestDataset = request.GET.getlist("dataset")[0]
     user = User.objects.filter(user_name=requestUsername)[0]
     dataset = Datasets.objects.filter(user_name = user,dataset_name = requestDataset)[0]
-    print(request.body)
-    print(request)
-    print(request.POST)
-    print(request.read())
     reqBody = json.loads(request.body)
     saved = 0
     for i in reqBody:
@@ -77,6 +77,7 @@ def saveCities(request):
             temp = reqBody[i]['temp'],
             feels_like = reqBody[i]['feels_like'],
             temp_min = reqBody[i]['temp_min'],
+            temp_max = reqBody[i]['temp_max'],
             pressure = reqBody[i]['pressure'],
             humidity = reqBody[i]['humidity'],
             visibility = reqBody[i]['visibility'],
@@ -90,6 +91,7 @@ def saveCities(request):
             temp = reqBody[i]['temp'],
             feels_like = reqBody[i]['feels_like'],
             temp_min = reqBody[i]['temp_min'],
+            temp_max = reqBody[i]['temp_max'],
             pressure = reqBody[i]['pressure'],
             humidity = reqBody[i]['humidity'],
             visibility = reqBody[i]['visibility'],
@@ -97,25 +99,41 @@ def saveCities(request):
             description = reqBody[i]['description']):
             data.save()
             saved += 1
+    print(saved,len(reqBody))
     if saved == len(reqBody):
         #if all the rows got saved successful return
         return HttpResponse(SUCCESSFULY_SAVED,content_type="text/plain")
     return HttpResponse(UNSECCESSFUL_LOGIN,content_type="text/plain")
+@ensure_csrf_cookie
+def deleteCities(request):
+    requestUsername = request.GET.getlist("username")[0]
+    requestDatasetName = request.GET.getlist("dataset")[0]
+    user = User.objects.filter(user_name=requestUsername)[0]
+    dataset = Datasets.objects.filter(dataset_name=requestDatasetName)[0]
+    datasets = WeatherDataset.objects.filter(user_name=user,dataset_name=dataset)
+    datasets.delete()
+    if datasets in WeatherDataset.objects.all():
+        return HttpResponse(UNSUCCESSFULY_DELETED,content_type="text/plain")
+    return HttpResponse(SUCCESSFULY_DELETED,content_type="text/plain")
 def getTable(request):
     requestUsername = request.GET.getlist("username")[0]
     requestDatasetName = request.GET.getlist("dataset")[0]
-    tables = WeatherDataset.objects.filter(user_name=requestUsername,dataset_name=requestDatasetName)
+    user = User.objects.filter(user_name=requestUsername)[0]
+    dataset = Datasets.objects.filter(dataset_name=requestDatasetName)[0]
+    tables = WeatherDataset.objects.filter(user_name=user,dataset_name=dataset)
     output = {}
     for i in tables:
-        output['name'] = i.name
-        output[i.name]['temp'] = i.temp
-        output[i.name]['feels_like'] = i.feels_like
-        output[i.name]['temp_min'] = i.temp_min
-        output[i.name]['pressure'] = i.pressure
-        output[i.name]['humidity'] = i.humidity
-        output[i.name]['visibility'] = i.visibility
-        output[i.name]['iconUrl'] = i.iconUrl
-        output[i.name]['description'] = i.description
+        temp = {}
+        temp['temp'] = i.temp
+        temp['feels_like'] = i.feels_like
+        temp['temp_min'] = i.temp_min
+        temp['temp_max'] = i.temp_max
+        temp['pressure'] = i.pressure
+        temp['humidity'] = i.humidity
+        temp['visibility'] = i.visibility
+        temp['iconUrl'] = i.iconUrl
+        temp['description'] = i.description
+        output[i.name] = temp
     return JsonResponse(output)
 def getDatasets(request):
     requestUsername = request.GET.getlist("username")[0]

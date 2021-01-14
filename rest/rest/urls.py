@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/weatherApp/getTable',views.getTable),
     path('api/weatherApp/LogIn',views.weatherAppLogIn),
     path('api/weatherApp/createUser',views.createUser),
+    path('api/weatherApp/deleteCities',views.deleteCities),
     path('api/weatherApp/storeDataset',views.storeDataset),
     path('api/weatherApp/saveCities',views.saveCities)
 ]
