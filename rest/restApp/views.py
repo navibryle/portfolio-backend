@@ -110,7 +110,7 @@ def deleteCities(request):
     requestUsername = request.GET.getlist("username")[0]
     requestDatasetName = request.GET.getlist("dataset")[0]
     user = User.objects.filter(user_name=requestUsername)[0]
-    dataset = Datasets.objects.filter(dataset_name=requestDatasetName)[0]
+    dataset = Datasets.objects.filter(dataset_name=requestDatasetName,user_name=user)[0]
     datasets = WeatherDataset.objects.filter(user_name=user,dataset_name=dataset)
     datasets.delete()
     if datasets in WeatherDataset.objects.all():
@@ -120,7 +120,7 @@ def getTable(request):
     requestUsername = request.GET.getlist("username")[0]
     requestDatasetName = request.GET.getlist("dataset")[0]
     user = User.objects.filter(user_name=requestUsername)[0]
-    dataset = Datasets.objects.filter(dataset_name=requestDatasetName)[0]
+    dataset = Datasets.objects.filter(dataset_name=requestDatasetName,user_name=user)[0]
     tables = WeatherDataset.objects.filter(user_name=user,dataset_name=dataset)
     output = {}
     for i in tables:
@@ -135,6 +135,7 @@ def getTable(request):
         temp['iconUrl'] = i.iconUrl
         temp['description'] = i.description
         output[i.name] = temp
+    print(output)
     return JsonResponse(output)
 def getDatasets(request):
     requestUsername = request.GET.getlist("username")[0]
