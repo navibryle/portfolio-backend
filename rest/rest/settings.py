@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '!7&0z%(9tgu4wt*942ujjrsa-1@38pd!=y1+xda9zsm5y^%-_m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = ["ipenales.com"]
 
 
 # Application definition

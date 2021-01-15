@@ -14,8 +14,10 @@ import signal
 import sys 
 
 #two paths appended so apache recognizes the python version in the virtual env
+sys.path.append('var/www/backend')
+sys.path.append('var/www/backedn/rest/rest')
 sys.path.append('/var/www/backend/rest')
-
+sys.path.append('/var/www/backend/lib/python3.6/site-packages')
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'rest.settings')

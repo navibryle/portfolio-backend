@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from restApp.models import *
 from django.http import HttpResponse,JsonResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 SUCCESSFUL_LOGIN = "11"
@@ -22,6 +22,7 @@ def weatherAppLogIn(request):
     requestPassword = request.GET.getlist("password")[0]
     queryRes = User.objects.filter(user_name=requestUsername)
     response = HttpResponse(content_type="text/plain")
+    response['Access-Control-Allow-Origin'] = '*'
     response["Content-Type"] = "text/plain"
     exist = False
     for i in queryRes:
@@ -47,7 +48,7 @@ def createRoot(request):
         root = User.objects.create(user_name=ROOT_UNAME,password=ROOT_PASS)
         root.save()
         return HttpResponse("Root has been saved!",content_type="text/plain")
-@ensure_csrf_cookie
+@csrf_exempt
 def createUser(request):
     requestUsername = request.GET.getlist("username")[0]
     requestPassword = request.GET.getlist("password")[0]
@@ -61,7 +62,7 @@ def createUser(request):
         resp = HttpResponse(ACCOUNT_CREATED,content_type="text/plain")
         return resp
 
-@ensure_csrf_cookie
+@csrf_exempt
 def saveCities(request):
     requestUsername = request.GET.getlist("username")[0]
     requestDataset = request.GET.getlist("dataset")[0]
@@ -104,7 +105,7 @@ def saveCities(request):
         #if all the rows got saved successful return
         return HttpResponse(SUCCESSFULY_SAVED,content_type="text/plain")
     return HttpResponse(UNSECCESSFUL_LOGIN,content_type="text/plain")
-@ensure_csrf_cookie
+@csrf_exempt
 def deleteCities(request):
     requestUsername = request.GET.getlist("username")[0]
     requestDatasetName = request.GET.getlist("dataset")[0]
