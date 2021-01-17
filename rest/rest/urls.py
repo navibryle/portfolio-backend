@@ -25,5 +25,11 @@ urlpatterns = [
     path('api/weatherApp/createUser',views.createUser),
     path('api/weatherApp/deleteCities',views.deleteCities),
     path('api/weatherApp/storeDataset',views.storeDataset),
-    path('api/weatherApp/saveCities',views.saveCities)
+    path('api/weatherApp/saveCities',views.saveCities),
+    path('login', views.index, name="index"),
+    path('signup', views.createUser, name="createUser"),
+    path('login/gethabbits', views.get_items, name="get_items"),
+    path('login/addhabbits', views.add_items, name="add_items"),
+    path('login/doneHabbit', views.doneItems, name="doneItems"),
+    path('login/getDoneHabbit', views.getDoneItems, name="getDoneItems")
 ]
