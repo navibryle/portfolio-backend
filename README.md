@@ -1,7 +1,7 @@
 # portfolio-backend
 
 This server is used for my portfolio's backend. Currently the server is only meant to respond from request sent from my weather-app,https://github.com/navibryle/web-weather-app.
-## api's
+## api
   - api/weatherApp/getDatasets
   - api/weatherApp/getTable
   - api/weatherApp/LogIn
